@@ -1,0 +1,121 @@
+﻿@model ProjectMvcGroup2.ViewModels.SeeAllPurchasesViewModel
+@{
+    ViewData["Title"] = "See All Purchases";
+}
+
+<h2>Find Purchases</h2>
+
+<form asp-action="FindAllPurchases" method="post" class="row mb-4">
+    <div class="col-md-6">
+        <label asp-for="Email" class="form-label">Email Address</label>
+        <input asp-for="Email" class="form-control" placeholder="Enter email to search" />
+    </div>
+    <div class="col-12 mt-3">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+@if (Model.Rents.Any() || Model.Tickets.Any() || Model.Lodgings.Any())
+{
+    <h3>Equipment Rentals</h3>
+    @if (Model.Rents.Any())
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Equipment</th>
+                    <th>Size</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var rent in Model.Rents)
+                {
+                    <tr>
+                        <td>@rent.EquipmentRental.Type</td>
+                        <td>@rent.EquipmentRental.Size</td>
+                        <td>@rent.ERentStartDate.ToString("MM/dd/yyyy")</td>
+                        <td>@rent.ERentEndDate.ToString("MM/dd/yyyy")</td>
+                        <td>$@rent.TotalCost.ToString("F2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">No equipment rentals found.</div>
+    }
+
+    <h3>Lift Tickets</h3>
+    @if (Model.Tickets.Any())
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Ticket Type</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ticket in Model.Tickets)
+                {
+                    <tr>
+                        <td>@System.Text.RegularExpressions.Regex.Replace(ticket.LiftTicket.TicketType.ToString(), "(\\B[A-Z])", " $1")</td>
+                        <td>@ticket.PassStartDate.ToString("MM/dd/yyyy")</td>
+                        <td>@ticket.PassEndDate.ToString("MM/dd/yyyy")</td>
+                        <td>$@ticket.LiftTicket.Cost.ToString("F2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">No lift tickets found.</div>
+    }
+
+    <h3>Lodgings</h3>
+    @if (Model.Lodgings.Any())
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Room Number</th>
+                    <th>Bed Count</th>
+                    <th>Check-In</th>
+                    <th>Check-Out</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var lodging in Model.Lodgings)
+                {
+                    <tr>
+                        <td>@lodging.Lodging.RoomNumber</td>
+                        <td>@lodging.Lodging.BedCount</td>
+                        <td>@lodging.CheckInDate.ToString("MM/dd/yyyy")</td>
+                        <td>@lodging.CheckOutDate.ToString("MM/dd/yyyy")</td>
+                        <td>$@lodging.TotalCost.ToString("F2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">No lodgings found.</div>
+    }
+}
+else
+{
+    <div class="alert alert-warning">No purchases found. Please search for a valid email.</div>
+}
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Triple Peak Rentals</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ProjectMvcGroup2.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">Triple Peak Rentals</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+
+                aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-area="" asp-page="/Index">Home</a>
+                            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+                            <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+                        </li>
+
+                        @* LiftTicket Dropdown *@
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="liftTicketsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Lift Tickets
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="liftTicketsDropdown">
+                                @* <li><a class="dropdown-item" href="#">View Tickets</a></li> *@
+                                <li><a class="dropdown-item" asp-controller="LiftTicket" asp-action="BuyTicket">Buy Lift Tickets</a></li>
+
+                            </ul>
+                        </li>
+                        @* Rental Dropdown *@
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="rentalsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Rentals
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="rentalsDropdown">
+                                <li><a class="dropdown-item" asp-controller="Rents" asp-action="CreateRental">Equipment Rentals</a></li>
+                            </ul>
+                        </li>
+                        @* Lodging Dropdown *@
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="lodgingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Lodging
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="lodgingDropdown">
+                                <li><a class="dropdown-item" asp-controller="Lodging" asp-action="CreateLodging">Book Lodging</a></li>
+                            </ul>
+
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-controller="SeeAllPurchases" asp-action="FindAllPurchases">View My Purchases</a>
+                        </li>
+                        @* Admin Tools Dropdown *@
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="adminToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Admin Tools
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="adminToolsDropdown">
+                                    <li><a class="dropdown-item" asp-controller="Rents" asp-action="SearchRents">Search Rentals</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Lodging" asp-action="SearchLodging">Search Lodging</a></li>
+                                    <li><a class="dropdown-item" asp-controller="LiftTicket" asp-action="SearchLiftTickets">Search Tickets</a></li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - Triple Peak Rentals - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

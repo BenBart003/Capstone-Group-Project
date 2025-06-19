@@ -1,0 +1,54 @@
+﻿@using ProjectLibraryGroup2
+@using ProjectMvcGroup2.ViewModels
+@model SearchRentsViewModel
+
+@{
+    ViewData["Title"] = "Search Rents";
+}
+
+<h3>Search Rental</h3>
+
+<form asp-controller="Rents" asp-action="SearchRents" method="post">
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </div>
+</form>
+
+@if (Model.RentsSearchResult != null && Model.RentsSearchResult.Any())
+{
+    <h4>Search Results</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Guest Name</th>
+                <th>Equipment Type</th>
+                <th>Equipment Size</th>
+                <th>Equipment Price</th>
+                <th>Rental Start Date</th>
+                <th>Rental End Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rent in Model.RentsSearchResult)
+            {
+                <tr>
+                    <td>@rent.Guest.FirstName @rent.Guest.LastName</td>
+                    <td>@rent.EquipmentRental.Type</td>
+                    <td>@rent.EquipmentRental.Size</td>
+                    <td>@rent.EquipmentRental.Price.ToString("C")</td>
+                    <td>@rent.ERentStartDate.ToString("MM/dd/yyyy")</td>
+                    <td>@rent.ERentEndDate.ToString("MM/dd/yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (Model.RentsSearchResult != null)
+{
+    <p>No results found.</p>
+}

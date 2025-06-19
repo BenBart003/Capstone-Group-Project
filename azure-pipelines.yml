@@ -1,0 +1,43 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- script: dotnet build -c $(buildConfiguration)
+  displayName: 'Build ASP.NET Core Application'
+
+- task: DotNetCoreCLI@2
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  displayName: 'Run Unit Tests'
+  inputs:
+    command: test
+    projects: '**/*Test*/*.csproj'
+    arguments: '-c $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  displayName: 'Publish Built Application'
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '-c $(buildConfiguration) --output $(build.artifactStagingDirectory)'
+    zipAfterPublish: true
+
+- task: AzureRmWebAppDeployment@4
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  displayName: 'Publish Application to Azure App Service'
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Group02AzurePortal'
+    appType: 'webApp'
+    WebAppName: 'FlightApplicationGroup2'
+    package: '$(build.artifactStagingDirectory)/*.zip'

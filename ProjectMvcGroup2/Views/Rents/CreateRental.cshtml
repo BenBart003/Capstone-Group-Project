@@ -1,0 +1,106 @@
+﻿@model ProjectMvcGroup2.ViewModels.CreateRentalViewModel
+@{
+    ViewData["Title"] = "Create Rental";
+}
+
+@if (ViewBag.SuccessMessage != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @ViewBag.SuccessMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+<h2>Search Equipment</h2>
+
+<!-- Search Form -->
+<form asp-action="CreateRental" method="post" class="row mb-4">
+    <div class="col-md-3">
+        <label asp-for="SearchStartDate" class="form-label">Start Date</label>
+        <input asp-for="SearchStartDate" class="form-control" type="date" />
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="SearchEndDate" class="form-label">End Date</label>
+        <input asp-for="SearchEndDate" class="form-control" type="date" />
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="SearchSize" class="form-label">Size</label>
+        <input asp-for="SearchSize" class="form-control" type="number" placeholder="e.g. 100" />
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="SearchType" class="form-label">Type</label>
+        <select asp-for="SearchType" class="form-select">
+            <option value="">-- All Types --</option>
+            <option value="Ski" selected="@("Ski" == Model.SearchType)">Ski</option>
+            <option value="Snowboard" selected="@("Snowboard" == Model.SearchType)">Snowboard</option>
+        </select>
+    </div>
+
+    <div class="col-12 mt-3">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+<hr />
+
+<h2>Available Equipment</h2>
+
+@if (Model.SearchResults != null && Model.SearchResults.Any())
+{
+    <div class="row">
+        @foreach (var equipment in Model.SearchResults)
+        {
+            <div class="col-md-12 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex flex-column me-3">
+                                <h5 class="card-title mb-0">@equipment.Type</h5>
+                                <p class="card-text mb-0">Size: @equipment.Size</p>
+                                <p class="card-text">Price: $@equipment.Price.ToString("F2")</p>
+                            </div>
+
+                            <!-- Booking Form -->
+                            <form asp-action="CreateRental" method="post" class="d-flex align-items-center flex-grow-1">
+                                <input type="hidden" name="EquipmentRentalID" value="@equipment.EquipmentRentalID" />
+                                <input type="hidden" name="GuestId" value="@Model.GuestId" />
+
+                                <div class="mx-3">
+                                    <label asp-for="ERentStartDate" class="form-label">Start</label>
+                                    <input name="ERentStartDate" class="form-control" type="date"
+                                           value="@(Model.ERentStartDate == DateTime.MinValue ? DateTime.Today.ToString("yyyy-MM-dd") : Model.ERentStartDate.ToString("yyyy-MM-dd"))"
+                                           required />
+                                    <span asp-validation-for="ERentStartDate" class="text-danger"></span>
+                                </div>
+
+                                <div class="mx-3">
+                                    <label asp-for="ERentEndDate" class="form-label">End</label>
+                                    <input name="ERentEndDate" class="form-control" type="date"
+                                           value="@(Model.ERentEndDate == DateTime.MinValue ? DateTime.Today.ToString("yyyy-MM-dd") : Model.ERentEndDate.ToString("yyyy-MM-dd"))"
+                                           required />
+                                    <span asp-validation-for="ERentEndDate" class="text-danger"></span>
+                                </div>
+
+                                <div class="ms-auto">
+                                    <button type="submit" class="btn btn-success">Rent Now</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info">No equipment found for your search.</div>
+}
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

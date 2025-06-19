@@ -1,0 +1,50 @@
+﻿@model ProjectMvcGroup2.ViewModels.CreateTicketViewModel
+@{
+    ViewData["Title"] = "Buy Lift Ticket";
+}
+
+<div class="container my-5">
+    <div class="card border-0 shadow-lg rounded-4 bg-body-secondary">
+        <div class="card-body p-5">
+
+            <div class="text-center mb-4">
+                <h1 class="fw-bold text-primary">🎿 Buy Lift Ticket</h1>
+                <p class="text-muted">Select your ticket and date to get started.</p>
+            </div>
+
+            @if (ViewBag.SuccessMessage != null)
+            {
+                <div class="alert alert-success text-center rounded-pill fw-semibold shadow-sm">
+                    @ViewBag.SuccessMessage
+                </div>
+            }
+
+            <form asp-action="BuyTicket" method="post" class="needs-validation" novalidate>
+                <div class="mb-4">
+                    <label asp-for="SelectedTicketType" class="form-label">🎫 Ticket Type</label>
+                    <select asp-for="SelectedTicketType" class="form-select form-select-lg rounded-3 shadow-sm"
+                            asp-items="ViewBag.TicketOptions">
+                    </select>
+                    <span asp-validation-for="SelectedTicketType" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="PassStartDate" class="form-label">📅 Pass Start Date</label>
+                    <input asp-for="PassStartDate" type="date" class="form-control form-control-lg rounded-3 shadow-sm" />
+                    <span asp-validation-for="PassStartDate" class="text-danger"></span>
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow">
+                        <i class="bi bi-currency-dollar me-2"></i>Purchase
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

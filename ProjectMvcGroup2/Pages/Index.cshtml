@@ -1,0 +1,73 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="banner">
+    <img src="~/images/banner.jpg" alt="Banner" class="background-image" />
+    <div class="overlay-text">
+        <div class="headline">Welcome to Triple Peak Rentals!</div>
+        <div class="button-group">
+            <a href="LiftTicket/BuyTicket" class="banner-button">Buy a Lift Ticket</a>
+            <a href="/Rents/CreateRental" class="banner-button">Book Equipment Rentals</a>
+            <a href="/Lodging/CreateLodging" class="banner-button">Book Lodging</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .banner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    .background-image {
+        width: 100%;
+        height: auto;
+        max-height: 900px;
+        object-fit: contain;
+        display: block;
+    }
+
+    .overlay-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.5);
+        padding: 25px;
+        color: #61b6f2;
+        font-size: 32px;
+        font-weight: bold;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    }
+
+    .headline {
+        margin-bottom: 20px;
+    }
+
+    .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .banner-button {
+        background-color: #61b6f2;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 18px;
+        transition: background-color 0.3s ease;
+    }
+
+        .banner-button:hover {
+            background-color: #7b8ab8;
+        }
+</style>
